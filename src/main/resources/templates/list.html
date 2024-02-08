@@ -15,7 +15,7 @@
         <select id="categoryId" name="categoryId">
             <option value="">All</option>
             <!-- For each category you should have one <option> like below  -->
-            <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.name}"> [cat.name]</option>
+            <option th:each="category : ${categories}" th:text="${category.name}"> [cat.name]</option>
         </select>
         <button id="filter" type="submit">Filter</button>
     </form>
@@ -35,25 +35,24 @@
             <th>Actions</th>
         </tr>
         <!-- For each product you should have one <tr> like below -->
-        <tr class="item" th:each="prod : ${products}">
-            <td th:text="${prod.name}">[prod.name]</td>
-            <td th:text="${prod.price}">[prod.price]</td>
-            <td th:text="${prod.quantity}">[prod.quantity]</td>
+        <tr class="item" th:each="product : ${products}">
+            <td th:text="${product.name}">[prod.name]</td>
+            <td th:text="${product.price}">[prod.price]</td>
+            <td th:text="${product.quantity}">[prod.quantity]</td>
             <td>
                 <ul>
                     <!-- For each product's category you should display one <li> element like the one below -->
-                    <li th:each="cat : ${prod.categories}" th:text="${cat.name}">[cat.name]</li>
+                    <li th:each="category : ${product.getCategories()}" th:text="${category.name}">[cat.name]</li>
                 </ul>
             </td>
-            <td th:text="${prod.creator}">[prod.creator]</td>
+            <td th:text="${product.getCreator()}">[prod.creator]</td>
             <td>
                 <!-- ProductsController.delete -->
-                <form th:method="POST" th:action="@{'/products/{id}/delete' (id=${prod.id})}"
-                      sec:authorize="hasRole('ROLE_ADMIN')">
+                <form th:method="POST" th:action="@{'/products/{id}/delete' (id=${product.getId()})}" sec:authorize="hasRole('ROLE_ADMIN')">
                     <button type="submit" class="delete-item">Delete</button>
                 </form>
                 <!-- ProductsController.showEdit -->
-                <a th:href="@{'/products/{id}/edit' (id=${prod.id})}" class="edit-item" sec:authorize="hasRole('ROLE_ADMIN')">Edit</a>
+                <a th:href="@{'/products/{id}/edit' (id=${product.id})}" class="edit-item" sec:authorize="hasRole('ROLE_ADMIN')">Edit</a>
             </td>
         </tr>
     </table>

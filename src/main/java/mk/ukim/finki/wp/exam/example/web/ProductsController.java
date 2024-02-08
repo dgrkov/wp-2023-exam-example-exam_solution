@@ -23,12 +23,10 @@ public class ProductsController {
         this.categoryService = categoryService;
     }
 
-
-    @GetMapping({"/", "/products"})
-    public String showProducts(
-            @RequestParam(required = false) String nameSearch,
-            @RequestParam(required = false) Long categoryId,
-            Model model) {
+    @GetMapping(path = {"/", "/products"})
+    public String showProducts(@RequestParam(required = false) String nameSearch,
+                               @RequestParam(required = false) Long categoryId,
+                               Model model) {
         List<Product> productList;
         if (nameSearch == null && categoryId == null) {
             productList = this.service.listAllProducts();
@@ -36,7 +34,8 @@ public class ProductsController {
             productList = this.service.listProductsByNameAndCategory(nameSearch, categoryId);
         }
         model.addAttribute("products", productList);
-            model.addAttribute("categories", this.categoryService.listAll());
+        model.addAttribute("categories", categoryService.listAll());
+
         return "list.html";
     }
 
@@ -50,7 +49,7 @@ public class ProductsController {
     public String showEdit(@PathVariable Long id, Model model) {
         Product product = this.service.findById(id);
         model.addAttribute("product", product);
-        model.addAttribute("categories", this.categoryService.listAll());
+        model.addAttribute("categories", categoryService.listAll());
         return "form.html";
     }
 

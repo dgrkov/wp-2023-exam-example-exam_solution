@@ -16,10 +16,10 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final UserDetailsService userDetailService;
+    private final UserDetailsService userDetailsService;
 
-    public SecurityConfig(UserDetailsService userDetailService) {
-        this.userDetailService = userDetailService;
+    public SecurityConfig(UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
     }
 
     //@Bean
@@ -34,7 +34,7 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests( (requests) -> requests
-                            .requestMatchers(AntPathRequestMatcher.antMatcher("/"))
+                        .requestMatchers(AntPathRequestMatcher.antMatcher("/"))
                         .permitAll()
                         .anyRequest()
                         .hasRole("ADMIN")
@@ -51,6 +51,7 @@ public class SecurityConfig {
                         .deleteCookies("JSESSIONID")
                         .logoutSuccessUrl("/")
                 );
+
         return http.build();
     }
 
@@ -58,9 +59,7 @@ public class SecurityConfig {
     public AuthenticationManager authManager(HttpSecurity http) throws Exception {
         AuthenticationManagerBuilder authenticationManagerBuilder =
                 http.getSharedObject(AuthenticationManagerBuilder.class);
-        authenticationManagerBuilder.userDetailsService(userDetailService);
+        authenticationManagerBuilder.userDetailsService(userDetailsService);
         return authenticationManagerBuilder.build();
     }
-
-
 }
